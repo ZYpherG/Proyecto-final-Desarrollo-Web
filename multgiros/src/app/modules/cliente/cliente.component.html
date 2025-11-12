@@ -1,0 +1,119 @@
+<div class="card">
+  <h2>Clientes</h2>
+  
+  <form id="formCliente" class="grid-3">
+    <div>
+      <label for="idPersona">Persona</label>
+      <select id="idPersona" name="idPersona" [(ngModel)]="cliente.idPersona" required>
+        <option value="">Seleccionar persona</option>
+        <option *ngFor="let persona of personas" [value]="persona.idPersona">
+          {{ persona.tipoPersona === 'NATURAL' ? 
+             (persona.primerNombre + ' ' + persona.primerApellido) : 
+             persona.razonSocial }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="fechaRegistro">Fecha Registro</label>
+      <input type="date" id="fechaRegistro" name="fechaRegistro" [(ngModel)]="cliente.fechaRegistro">
+    </div>
+    
+    <div>
+      <label for="categoria">Categoría</label>
+      <select id="categoria" name="categoria" [(ngModel)]="cliente.categoria">
+        <option value="REGULAR">Regular</option>
+        <option value="PREMIUM">Premium</option>
+        <option value="VIP">VIP</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="limiteCredito">Límite Crédito</label>
+      <input type="number" id="limiteCredito" name="limiteCredito" [(ngModel)]="cliente.limiteCredito" step="0.01">
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="cliente.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearCliente()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="cliente.idCliente" (click)="Eliminar(cliente)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section">
+    <div class="form-group">
+      <label for="buscarPersona">Buscar por Persona</label>
+      <input type="number" id="buscarPersona" #buscarPersona placeholder="ID Persona">
+    </div>
+    <button type="button" class="btn-secondary" (click)="buscarPorPersona(buscarPersona.value)">Buscar</button>
+    <button type="button" class="btn-secondary" (click)="buscarClientes()">Mostrar Todos</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Clientes</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Persona</th>
+          <th>Fecha Registro</th>
+          <th>Categoría</th>
+          <th>Límite Crédito</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of clientes">
+          <td>{{ c.idCliente }}</td>
+          <td>
+            <span *ngIf="c.persona?.tipoPersona === 'NATURAL'">
+              {{ c.persona?.primerNombre }} {{ c.persona?.primerApellido }}
+            </span>
+            <span *ngIf="c.persona?.tipoPersona === 'JURIDICA'">
+              {{ c.persona?.razonSocial }}
+            </span>
+          </td>
+          <td>{{ c.fechaRegistro | date:'shortDate' }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-secondary': c.categoria === 'REGULAR',
+              'bg-warning': c.categoria === 'PREMIUM',
+              'bg-success': c.categoria === 'VIP'
+            }">
+              {{ c.categoria }}
+            </span>
+          </td>
+          <td>{{ c.limiteCredito | currency }}</td>
+          <td>
+            <span class="badge" [ngClass]="c.activo ? 'bg-success' : 'bg-danger'">
+              {{ c.activo ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(c)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(c)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="clientes.length === 0">
+          <td colspan="7" style="text-align: center;">No hay clientes registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

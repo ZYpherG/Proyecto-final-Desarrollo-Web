@@ -1,0 +1,113 @@
+<div class="card">
+  <h2>Giros de Negocio</h2>
+  
+  <form id="formGiro" class="grid-3">
+    <div>
+      <label for="codigoGiro">Código Giro</label>
+      <input type="text" id="codigoGiro" name="codigoGiro" [(ngModel)]="giro.codigoGiro" required>
+    </div>
+    
+    <div class="grid-span-2">
+      <label for="nombreGiro">Nombre Giro</label>
+      <input type="text" id="nombreGiro" name="nombreGiro" [(ngModel)]="giro.nombreGiro" required>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" name="descripcion" [(ngModel)]="giro.descripcion" rows="3"></textarea>
+    </div>
+    
+    <div>
+      <label for="tipoGiro">Tipo Giro</label>
+      <select id="tipoGiro" name="tipoGiro" [(ngModel)]="giro.tipoGiro" required>
+        <option value="EXTRACCION">Extracción</option>
+        <option value="PROCESO">Proceso</option>
+        <option value="VENTA_MAQUINARIA">Venta Maquinaria</option>
+        <option value="TRANSPORTE">Transporte</option>
+        <option value="CONSTRUCCION">Construcción</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="presupuestoAnual">Presupuesto Anual</label>
+      <input type="number" id="presupuestoAnual" name="presupuestoAnual" [(ngModel)]="giro.presupuestoAnual" step="0.01">
+    </div>
+    
+    <div>
+      <label for="responsable">Responsable</label>
+      <input type="text" id="responsable" name="responsable" [(ngModel)]="giro.responsable">
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="giro.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearGiro()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="giro.idGiroNegocio" (click)="Eliminar(giro)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section">
+    <div class="form-group">
+      <label for="buscarCodigo">Buscar por Código</label>
+      <input type="text" id="buscarCodigo" #buscarCodigo placeholder="Código giro">
+    </div>
+    <button type="button" class="btn-secondary" (click)="buscarPorCodigo(buscarCodigo.value)">Buscar</button>
+    <button type="button" class="btn-secondary" (click)="buscarGiros()">Mostrar Todos</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Giros de Negocio</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Presupuesto</th>
+          <th>Responsable</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of giros">
+          <td>{{ g.idGiroNegocio }}</td>
+          <td><strong>{{ g.codigoGiro }}</strong></td>
+          <td>{{ g.nombreGiro }}</td>
+          <td>
+            <span class="badge bg-info">{{ g.tipoGiro }}</span>
+          </td>
+          <td>{{ g.presupuestoAnual | currency }}</td>
+          <td>{{ g.responsable || 'N/A' }}</td>
+          <td>
+            <span class="badge" [ngClass]="g.activo ? 'bg-success' : 'bg-danger'">
+              {{ g.activo ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(g)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(g)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="giros.length === 0">
+          <td colspan="8" style="text-align: center;">No hay giros de negocio registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="card">
+  <h2>Bitácora del Sistema</h2>
+  
+  <div class="card">
+    <h3>Filtros de Búsqueda</h3>
+    <div class="search-section grid-4">
+      <div class="form-group">
+        <label for="buscarTabla">Buscar por Tabla</label>
+        <select id="buscarTabla" #buscarTabla>
+          <option value="">Todas las tablas</option>
+          <option *ngFor="let tabla of tablasUnicas" [value]="tabla">{{ tabla }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="buscarTipoMovimiento">Tipo Movimiento</label>
+        <select id="buscarTipoMovimiento" #buscarTipoMovimiento>
+          <option value="">Todos los tipos</option>
+          <option value="CREACION">Creación</option>
+          <option value="MODIFICACION">Modificación</option>
+          <option value="ELIMINACION">Eliminación</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="buscarUsuario">Buscar por Usuario</label>
+        <select id="buscarUsuario" #buscarUsuario>
+          <option value="">Todos los usuarios</option>
+          <option *ngFor="let usuario of usuariosUnicos" [value]="usuario">{{ usuario }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="fechaInicio">Fecha Inicio</label>
+        <input type="date" id="fechaInicio" #fechaInicio>
+      </div>
+      
+      <div class="form-group">
+        <label for="fechaFin">Fecha Fin</label>
+        <input type="date" id="fechaFin" #fechaFin>
+      </div>
+      
+      <div class="form-group align-end">
+        <button type="button" class="btn-secondary" 
+                (click)="buscarPorTabla(buscarTabla.value)">Buscar Tabla</button>
+      </div>
+      
+      <div class="form-group align-end">
+        <button type="button" class="btn-secondary"
+                (click)="buscarPorTipoMovimiento(buscarTipoMovimiento.value)">Buscar Tipo</button>
+      </div>
+      
+      <div class="form-group align-end">
+        <button type="button" class="btn-secondary"
+                (click)="buscarPorRangoFechas(fechaInicio.value, fechaFin.value)">Buscar Fechas</button>
+      </div>
+      
+      <div class="form-group align-end">
+        <button type="button" class="btn-secondary" (click)="buscarBitacoras()">Mostrar Todos</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Registros de Bitácora</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tabla</th>
+          <th>Campo</th>
+          <th>Llave Primaria</th>
+          <th>Tipo Movimiento</th>
+          <th>Usuario</th>
+          <th>Fecha</th>
+          <th>Valor Anterior</th>
+          <th>Valor Nuevo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bitacoras">
+          <td>{{ b.idBitacora }}</td>
+          <td><strong>{{ b.tabla }}</strong></td>
+          <td>{{ b.campo || 'N/A' }}</td>
+          <td>{{ b.llavePrimaria }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': b.tipoMovimiento === 'CREACION',
+              'bg-warning': b.tipoMovimiento === 'MODIFICACION',
+              'bg-danger': b.tipoMovimiento === 'ELIMINACION'
+            }">
+              {{ b.tipoMovimiento }}
+            </span>
+          </td>
+          <td>{{ b.usuarioCreacion }}</td>
+          <td>{{ b.fechaCreacion | date:'short' }}</td>
+          <td class="text-muted">{{ b.valorAnterior || 'N/A' }}</td>
+          <td class="text-success">{{ b.valorNuevo || 'N/A' }}</td>
+        </tr>
+        <tr *ngIf="bitacoras.length === 0">
+          <td colspan="9" style="text-align: center;">No hay registros en la bitácora</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

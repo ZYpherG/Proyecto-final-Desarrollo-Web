@@ -1,0 +1,91 @@
+<div class="card">
+  <h2>Categorías de Inventario</h2>
+  
+  <form id="formCategoria" class="grid-3">
+    <div>
+      <label for="idGiroNegocio">Giro de Negocio</label>
+      <select id="idGiroNegocio" name="idGiroNegocio" [(ngModel)]="categoria.idGiroNegocio" required>
+        <option value="">Seleccionar giro</option>
+        <option *ngFor="let giro of girosNegocio" [value]="giro.idGiroNegocio">
+          {{ giro.nombreGiro }}
+        </option>
+      </select>
+    </div>
+    
+    <div class="grid-span-2">
+      <label for="nombreCategoria">Nombre Categoría</label>
+      <input type="text" id="nombreCategoria" name="nombreCategoria" [(ngModel)]="categoria.nombreCategoria" required>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" name="descripcion" [(ngModel)]="categoria.descripcion" rows="3"></textarea>
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="categoria.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearCategoria()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="categoria.idCategoria" (click)="Eliminar(categoria)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section">
+    <div class="form-group">
+      <label for="buscarGiro">Buscar por Giro</label>
+      <input type="number" id="buscarGiro" #buscarGiro placeholder="ID Giro Negocio">
+    </div>
+    <button type="button" class="btn-secondary" (click)="buscarPorGiro(buscarGiro.value)">Buscar</button>
+    <button type="button" class="btn-secondary" (click)="buscarCategorias()">Mostrar Todos</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Categorías</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Giro Negocio</th>
+          <th>Descripción</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of categorias">
+          <td>{{ c.idCategoria }}</td>
+          <td>{{ c.nombreCategoria }}</td>
+          <td>{{ c.giroNegocio?.nombreGiro }}</td>
+          <td>{{ c.descripcion || 'N/A' }}</td>
+          <td>
+            <span class="badge" [ngClass]="c.activo ? 'bg-success' : 'bg-danger'">
+              {{ c.activo ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(c)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(c)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="categorias.length === 0">
+          <td colspan="6" style="text-align: center;">No hay categorías registradas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

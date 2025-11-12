@@ -1,0 +1,179 @@
+<div class="card">
+  <h2>Facturas</h2>
+  
+  <form id="formFactura" class="grid-3">
+    <div>
+      <label for="idOrden">Orden</label>
+      <select id="idOrden" name="idOrden" [(ngModel)]="factura.idOrden">
+        <option value="">Seleccionar orden</option>
+        <option *ngFor="let orden of ordenes" [value]="orden.idOrden">
+          {{ orden.numeroOrden }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idMetodoPago">Método Pago</label>
+      <select id="idMetodoPago" name="idMetodoPago" [(ngModel)]="factura.idMetodoPago">
+        <option value="">Seleccionar método</option>
+        <option *ngFor="let metodo of metodosPago" [value]="metodo.idMetodoPago">
+          {{ metodo.nombreMetodo }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="numeroFactura">Número Factura</label>
+      <input type="text" id="numeroFactura" name="numeroFactura" [(ngModel)]="factura.numeroFactura" required>
+    </div>
+    
+    <div>
+      <label for="fechaEmision">Fecha Emisión</label>
+      <input type="date" id="fechaEmision" name="fechaEmision" [(ngModel)]="factura.fechaEmision">
+    </div>
+    
+    <div>
+      <label for="fechaVencimiento">Fecha Vencimiento</label>
+      <input type="date" id="fechaVencimiento" name="fechaVencimiento" [(ngModel)]="factura.fechaVencimiento">
+    </div>
+    
+    <div>
+      <label for="subtotal">Subtotal</label>
+      <input type="number" id="subtotal" name="subtotal" [(ngModel)]="factura.subtotal" step="0.01"
+             (change)="calcularTotal()">
+    </div>
+    
+    <div>
+      <label for="impuestos">Impuestos</label>
+      <input type="number" id="impuestos" name="impuestos" [(ngModel)]="factura.impuestos" step="0.01"
+             (change)="calcularTotal()">
+    </div>
+    
+    <div>
+      <label for="descuentos">Descuentos</label>
+      <input type="number" id="descuentos" name="descuentos" [(ngModel)]="factura.descuentos" step="0.01"
+             (change)="calcularTotal()">
+    </div>
+    
+    <div>
+      <label for="total">Total</label>
+      <input type="number" id="total" name="total" [(ngModel)]="factura.total" step="0.01" readonly>
+    </div>
+    
+    <div>
+      <label for="estado">Estado</label>
+      <select id="estado" name="estado" [(ngModel)]="factura.estado">
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="PAGADA">Pagada</option>
+        <option value="PARCIAL">Parcial</option>
+        <option value="CANCELADA">Cancelada</option>
+        <option value="ANULADA">Anulada</option>
+      </select>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" name="observaciones" [(ngModel)]="factura.observaciones" rows="3"></textarea>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="usuarioCreacion">Usuario Creación</label>
+      <input type="text" id="usuarioCreacion" name="usuarioCreacion" [(ngModel)]="factura.usuarioCreacion">
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearFactura()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="factura.idFactura" (click)="Eliminar(factura)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarNumero">Buscar por Número</label>
+      <input type="text" id="buscarNumero" #buscarNumero placeholder="Número factura">
+    </div>
+    <div class="form-group">
+      <label for="buscarOrden">Buscar por Orden</label>
+      <input type="number" id="buscarOrden" #buscarOrden placeholder="ID Orden">
+    </div>
+    <div class="form-group">
+      <label for="buscarEstado">Estado</label>
+      <select id="buscarEstado" #buscarEstado>
+        <option value="">Todos los estados</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="PAGADA">Pagada</option>
+        <option value="PARCIAL">Parcial</option>
+        <option value="CANCELADA">Cancelada</option>
+        <option value="ANULADA">Anulada</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorNumero(buscarNumero.value)">Buscar Número</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorOrden(buscarOrden.value)">Buscar Orden</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorEstado(buscarEstado.value)">Buscar Estado</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarVencidas()">Facturas Vencidas</button>
+      <button type="button" class="btn-secondary" (click)="buscarFacturas()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Facturas</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Número</th>
+          <th>Orden</th>
+          <th>Fecha Emisión</th>
+          <th>Fecha Vencimiento</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of facturas" [class.table-warning]="estaVencida(f)">
+          <td>{{ f.idFactura }}</td>
+          <td><strong>{{ f.numeroFactura }}</strong></td>
+          <td>{{ f.orden?.numeroOrden || 'N/A' }}</td>
+          <td>{{ f.fechaEmision | date:'shortDate' }}</td>
+          <td [class.text-danger]="estaVencida(f)">{{ f.fechaVencimiento | date:'shortDate' || 'N/A' }}</td>
+          <td>{{ f.total | currency }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-warning': f.estado === 'PENDIENTE',
+              'bg-success': f.estado === 'PAGADA',
+              'bg-info': f.estado === 'PARCIAL',
+              'bg-danger': f.estado === 'CANCELADA' || f.estado === 'ANULADA'
+            }">
+              {{ f.estado }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(f)">Editar</button>
+              <button class="btn-success" *ngIf="f.estado === 'PENDIENTE'" (click)="marcarComoPagada(f)">Marcar Pagada</button>
+              <button class="btn-danger" (click)="Eliminar(f)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="facturas.length === 0">
+          <td colspan="8" style="text-align: center;">No hay facturas registradas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

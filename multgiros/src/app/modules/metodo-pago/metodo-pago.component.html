@@ -1,0 +1,79 @@
+<div class="card">
+  <h2>Métodos de Pago</h2>
+  
+  <form id="formMetodo" class="grid-3">
+    <div class="grid-span-3">
+      <label for="nombreMetodo">Nombre Método</label>
+      <input type="text" id="nombreMetodo" name="nombreMetodo" [(ngModel)]="metodo.nombreMetodo" required>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" name="descripcion" [(ngModel)]="metodo.descripcion" rows="3"></textarea>
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="metodo.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearMetodo()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="metodo.idMetodoPago" (click)="Eliminar(metodo)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section">
+    <div class="form-group">
+      <label for="buscarNombre">Buscar por Nombre</label>
+      <input type="text" id="buscarNombre" #buscarNombre placeholder="Nombre método">
+    </div>
+    <button type="button" class="btn-secondary" (click)="buscarPorNombre(buscarNombre.value)">Buscar</button>
+    <button type="button" class="btn-secondary" (click)="buscarMetodos()">Mostrar Todos</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Métodos de Pago</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of metodos">
+          <td>{{ m.idMetodoPago }}</td>
+          <td><strong>{{ m.nombreMetodo }}</strong></td>
+          <td>{{ m.descripcion || 'N/A' }}</td>
+          <td>
+            <span class="badge" [ngClass]="m.activo ? 'bg-success' : 'bg-danger'">
+              {{ m.activo ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(m)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(m)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="metodos.length === 0">
+          <td colspan="5" style="text-align: center;">No hay métodos de pago registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

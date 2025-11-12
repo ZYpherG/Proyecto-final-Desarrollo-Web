@@ -1,0 +1,151 @@
+<div class="card">
+  <h2>Sucursales</h2>
+  
+  <form id="formSucursal" class="grid-3">
+    <div>
+      <label for="idGiroNegocio">Giro de Negocio</label>
+      <select id="idGiroNegocio" name="idGiroNegocio" [(ngModel)]="sucursal.idGiroNegocio" required>
+        <option value="">Seleccionar giro</option>
+        <option *ngFor="let giro of girosNegocio" [value]="giro.idGiroNegocio">
+          {{ giro.nombreGiro }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="codigoSucursal">Código Sucursal</label>
+      <input type="text" id="codigoSucursal" name="codigoSucursal" [(ngModel)]="sucursal.codigoSucursal" required>
+    </div>
+    
+    <div class="grid-span-2">
+      <label for="nombreSucursal">Nombre Sucursal</label>
+      <input type="text" id="nombreSucursal" name="nombreSucursal" [(ngModel)]="sucursal.nombreSucursal" required>
+    </div>
+    
+    <div>
+      <label for="departamento">Departamento</label>
+      <input type="text" id="departamento" name="departamento" [(ngModel)]="sucursal.departamento" required>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="direccion">Dirección</label>
+      <textarea id="direccion" name="direccion" [(ngModel)]="sucursal.direccion" rows="2"></textarea>
+    </div>
+    
+    <div>
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" name="telefono" [(ngModel)]="sucursal.telefono">
+    </div>
+    
+    <div>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" [(ngModel)]="sucursal.email">
+    </div>
+    
+    <div>
+      <label for="fechaApertura">Fecha Apertura</label>
+      <input type="date" id="fechaApertura" name="fechaApertura" [(ngModel)]="sucursal.fechaApertura">
+    </div>
+    
+    <div>
+      <label for="fechaCierre">Fecha Cierre</label>
+      <input type="date" id="fechaCierre" name="fechaCierre" [(ngModel)]="sucursal.fechaCierre">
+    </div>
+    
+    <div>
+      <label for="activa">Activa</label>
+      <select id="activa" name="activa" [(ngModel)]="sucursal.activa">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearSucursal()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="sucursal.idSucursal" (click)="Eliminar(sucursal)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarCodigo">Buscar por Código</label>
+      <input type="text" id="buscarCodigo" #buscarCodigo placeholder="Código sucursal">
+    </div>
+    <div class="form-group">
+      <label for="buscarGiro">Buscar por Giro</label>
+      <input type="number" id="buscarGiro" #buscarGiro placeholder="ID Giro">
+    </div>
+    <div class="form-group">
+      <label for="buscarDepartamento">Departamento</label>
+      <input type="text" id="buscarDepartamento" #buscarDepartamento placeholder="Departamento">
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorCodigo(buscarCodigo.value)">Buscar Código</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorGiro(buscarGiro.value)">Buscar Giro</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorDepartamento(buscarDepartamento.value)">Buscar Depto.</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarActivas()">Solo Activas</button>
+      <button type="button" class="btn-secondary" (click)="buscarSucursales()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Sucursales</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Giro Negocio</th>
+          <th>Departamento</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Fecha Apertura</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of sucursales">
+          <td>{{ s.idSucursal }}</td>
+          <td><strong>{{ s.codigoSucursal }}</strong></td>
+          <td>{{ s.nombreSucursal }}</td>
+          <td>{{ s.giroNegocio?.nombreGiro }}</td>
+          <td>{{ s.departamento }}</td>
+          <td>{{ s.direccion || 'N/A' }}</td>
+          <td>{{ s.telefono || 'N/A' }}</td>
+          <td>{{ s.fechaApertura | date:'shortDate' }}</td>
+          <td>
+            <span [ngClass]="obtenerClaseEstado(s.activa)">
+              {{ obtenerTextoEstado(s.activa) }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(s)">Editar</button>
+              <button class="btn-warning" *ngIf="s.activa" (click)="cerrarSucursal(s)">Cerrar</button>
+              <button class="btn-success" *ngIf="!s.activa" (click)="reabrirSucursal(s)">Reabrir</button>
+              <button class="btn-danger" (click)="Eliminar(s)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="sucursales.length === 0">
+          <td colspan="10" style="text-align: center;">No hay sucursales registradas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="app-layout">
+  <!-- Top Bar -->
+  <div class="topbar d-flex justify-content-between align-items-center px-3">
+    <h1>Sistema de Gestión Integral</h1>
+
+    <div class="user-info d-flex align-items-center" *ngIf="isLoggedIn()">
+      <i class="bi bi-person-circle fs-4 me-2"></i>
+      <span class="me-3 fw-semibold">{{ getUsuarioLogueado()?.nombreUsuario }}</span>
+      <button (click)="logout()" class="btn btn-outline-light btn-sm">
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Navegación por Categorías -->
+    <div class="categories-nav">
+      <button *ngFor="let category of categories" (click)="selectCategory(category.id)"
+        [class.active]="selectedCategory === category.id" class="category-button">
+        <i [class]="category.icon"></i>
+        {{ category.name }}
+      </button>
+    </div>
+
+    <!-- Tabs dentro de cada categoría -->
+    <div class="tabs-container" *ngIf="selectedCategory">
+      <div class="tabs">
+        <button *ngFor="let tab of getCategoryTabs()" (click)="selectTab(tab.id)"
+          [class.active]="selectedTab === tab.id" class="tab-button">
+          {{ tab.name }}
+        </button>
+      </div>
+
+      <div class="tab-content">
+        <!-- Bitácora -->
+        <div *ngIf="selectedTab === 'bitacora'" class="tab show">
+          <app-bitacora></app-bitacora>
+        </div>
+
+        <!-- Categoría Inventario -->
+        <div *ngIf="selectedTab === 'categoria'" class="tab show">
+          <app-categoria-inventario></app-categoria-inventario>
+        </div>
+
+        <!-- Cliente -->
+        <div *ngIf="selectedTab === 'cliente'" class="tab show">
+          <app-cliente></app-cliente>
+        </div>
+
+        <!-- Comunicación Cliente -->
+        <div *ngIf="selectedTab === 'comunicacion'" class="tab show">
+          <app-comunicacion-cliente></app-comunicacion-cliente>
+        </div>
+
+        <!-- Detalle Orden -->
+        <div *ngIf="selectedTab === 'detalle'" class="tab show">
+          <app-detalle-orden></app-detalle-orden>
+        </div>
+
+        <!-- Documento Asociado -->
+        <div *ngIf="selectedTab === 'documento'" class="tab show">
+          <app-documento-asociado></app-documento-asociado>
+        </div>
+
+        <!-- Empleado -->
+        <div *ngIf="selectedTab === 'empleado'" class="tab show">
+          <app-empleado></app-empleado>
+        </div>
+
+        <!-- Estado Empleado -->
+        <div *ngIf="selectedTab === 'estado-empleado'" class="tab show">
+          <app-estado-empleado></app-estado-empleado>
+        </div>
+
+        <!-- Estado Orden -->
+        <div *ngIf="selectedTab === 'estado-orden'" class="tab show">
+          <app-estado-orden></app-estado-orden>
+        </div>
+
+        <!-- Factura -->
+        <div *ngIf="selectedTab === 'factura'" class="tab show">
+          <app-factura></app-factura>
+        </div>
+
+        <!-- Giro Negocio -->
+        <div *ngIf="selectedTab === 'giro'" class="tab show">
+          <app-giro-negocio></app-giro-negocio>
+        </div>
+
+        <!-- Inventario -->
+        <div *ngIf="selectedTab === 'inventario'" class="tab show">
+          <app-inventario></app-inventario>
+        </div>
+
+        <!-- Método Pago -->
+        <div *ngIf="selectedTab === 'metodo-pago'" class="tab show">
+          <app-metodo-pago></app-metodo-pago>
+        </div>
+
+        <!-- Movimiento Inventario -->
+        <div *ngIf="selectedTab === 'movimiento'" class="tab show">
+          <app-movimiento-inventario></app-movimiento-inventario>
+        </div>
+
+        <!-- Orden -->
+        <div *ngIf="selectedTab === 'orden'" class="tab show">
+          <app-orden></app-orden>
+        </div>
+
+        <!-- Persona -->
+        <div *ngIf="selectedTab === 'persona'" class="tab show">
+          <app-persona></app-persona>
+        </div>
+
+        <!-- Proveedor -->
+        <div *ngIf="selectedTab === 'proveedor'" class="tab show">
+          <app-proveedor></app-proveedor>
+        </div>
+
+        <!-- Sucursal -->
+        <div *ngIf="selectedTab === 'sucursal'" class="tab show">
+          <app-sucursal></app-sucursal>
+        </div>
+
+        <!-- Usuario -->
+        <div *ngIf="selectedTab === 'usuario'" class="tab show">
+          <app-usuario></app-usuario>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="footer">
+    Sistema de Gestión Integral &copy; 2024
+  </div>
+</div>

@@ -1,0 +1,181 @@
+<div class="card">
+  <h2>Movimientos de Inventario</h2>
+  
+  <form id="formMovimiento" class="grid-3">
+    <div>
+      <label for="idInventario">Inventario</label>
+      <select id="idInventario" name="idInventario" [(ngModel)]="movimiento.idInventario" required>
+        <option value="">Seleccionar producto</option>
+        <option *ngFor="let inventario of inventarios" [value]="inventario.idInventario">
+          {{ inventario.nombreProducto }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="tipoMovimiento">Tipo Movimiento</label>
+      <select id="tipoMovimiento" name="tipoMovimiento" [(ngModel)]="movimiento.tipoMovimiento" required>
+        <option value="ENTRADA">Entrada</option>
+        <option value="SALIDA">Salida</option>
+        <option value="AJUSTE">Ajuste</option>
+        <option value="DEVOLUCION">Devolución</option>
+        <option value="PERDIDA">Pérdida</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="cantidad">Cantidad</label>
+      <input type="number" id="cantidad" name="cantidad" [(ngModel)]="movimiento.cantidad" step="0.001" required>
+    </div>
+    
+    <div>
+      <label for="cantidadAnterior">Cantidad Anterior</label>
+      <input type="number" id="cantidadAnterior" name="cantidadAnterior" [(ngModel)]="movimiento.cantidadAnterior" step="0.001">
+    </div>
+    
+    <div>
+      <label for="cantidadNueva">Cantidad Nueva</label>
+      <input type="number" id="cantidadNueva" name="cantidadNueva" [(ngModel)]="movimiento.cantidadNueva" step="0.001">
+    </div>
+    
+    <div>
+      <label for="idOrden">Orden</label>
+      <select id="idOrden" name="idOrden" [(ngModel)]="movimiento.idOrden">
+        <option value="">Seleccionar orden</option>
+        <option *ngFor="let orden of ordenes" [value]="orden.idOrden">
+          {{ orden.numeroOrden }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idUsuario">Usuario</label>
+      <select id="idUsuario" name="idUsuario" [(ngModel)]="movimiento.idUsuario">
+        <option value="">Seleccionar usuario</option>
+        <option *ngFor="let usuario of usuarios" [value]="usuario.idUsuario">
+          {{ usuario.nombreUsuario }}
+        </option>
+      </select>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="motivo">Motivo</label>
+      <textarea id="motivo" name="motivo" [(ngModel)]="movimiento.motivo" rows="3"></textarea>
+    </div>
+    
+    <div>
+      <label for="fechaMovimiento">Fecha Movimiento</label>
+      <input type="datetime-local" id="fechaMovimiento" name="fechaMovimiento" [(ngModel)]="movimiento.fechaMovimiento">
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearMovimiento()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="movimiento.idMovimiento" (click)="Eliminar(movimiento)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarInventario">Buscar por Inventario</label>
+      <input type="number" id="buscarInventario" #buscarInventario placeholder="ID Inventario">
+    </div>
+    <div class="form-group">
+      <label for="buscarTipo">Tipo Movimiento</label>
+      <select id="buscarTipo" #buscarTipo>
+        <option value="">Todos los tipos</option>
+        <option value="ENTRADA">Entrada</option>
+        <option value="SALIDA">Salida</option>
+        <option value="AJUSTE">Ajuste</option>
+        <option value="DEVOLUCION">Devolución</option>
+        <option value="PERDIDA">Pérdida</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="buscarOrden">Buscar por Orden</label>
+      <input type="number" id="buscarOrden" #buscarOrden placeholder="ID Orden">
+    </div>
+    <div class="form-group">
+      <label for="buscarUsuario">Buscar por Usuario</label>
+      <input type="number" id="buscarUsuario" #buscarUsuario placeholder="ID Usuario">
+    </div>
+    
+    <div class="form-group">
+      <label for="fechaInicio">Fecha Inicio</label>
+      <input type="date" id="fechaInicio" #fechaInicio>
+    </div>
+    <div class="form-group">
+      <label for="fechaFin">Fecha Fin</label>
+      <input type="date" id="fechaFin" #fechaFin>
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorInventario(buscarInventario.value)">Buscar Inventario</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorTipoMovimiento(buscarTipo.value)">Buscar Tipo</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorRangoFechas(fechaInicio.value, fechaFin.value)">Buscar Fechas</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarMovimientos()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Movimientos</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Producto</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Stock</th>
+          <th>Orden</th>
+          <th>Usuario</th>
+          <th>Fecha</th>
+          <th>Motivo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of movimientos">
+          <td>{{ m.idMovimiento }}</td>
+          <td>{{ m.inventario?.nombreProducto }}</td>
+          <td>
+            <span class="badge" [ngClass]="obtenerClaseTipoMovimiento(m.tipoMovimiento)">
+              {{ obtenerIconoTipoMovimiento(m.tipoMovimiento) }} {{ m.tipoMovimiento }}
+            </span>
+          </td>
+          <td [class.text-success]="m.tipoMovimiento === 'ENTRADA'" 
+              [class.text-danger]="m.tipoMovimiento === 'SALIDA' || m.tipoMovimiento === 'PERDIDA'">
+            {{ m.cantidad }}
+          </td>
+          <td>
+            <small class="text-muted">{{ calcularStock(m) }}</small>
+          </td>
+          <td>{{ m.orden?.numeroOrden || 'N/A' }}</td>
+          <td>{{ m.usuario?.nombreUsuario || 'N/A' }}</td>
+          <td>{{ m.fechaMovimiento | date:'short' }}</td>
+          <td>{{ m.motivo || 'N/A' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(m)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(m)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="movimientos.length === 0">
+          <td colspan="10" style="text-align: center;">No hay movimientos registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

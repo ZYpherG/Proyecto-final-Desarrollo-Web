@@ -1,0 +1,178 @@
+<div class="card">
+  <h2>Proveedores</h2>
+  
+  <form id="formProveedor" class="grid-3">
+    <div>
+      <label for="idPersona">Persona</label>
+      <select id="idPersona" name="idPersona" [(ngModel)]="proveedor.idPersona" required>
+        <option value="">Seleccionar persona</option>
+        <option *ngFor="let persona of personas" [value]="persona.idPersona">
+          {{ persona.tipoPersona === 'NATURAL' ? 
+             (persona.primerNombre + ' ' + persona.primerApellido) : 
+             persona.razonSocial }}
+        </option>
+      </select>
+    </div>
+    
+    <div class="grid-span-2">
+      <label for="nombreComercial">Nombre Comercial</label>
+      <input type="text" id="nombreComercial" name="nombreComercial" [(ngModel)]="proveedor.nombreComercial">
+    </div>
+    
+    <div>
+      <label for="categoriaProveedor">Categoría</label>
+      <input type="text" id="categoriaProveedor" name="categoriaProveedor" [(ngModel)]="proveedor.categoriaProveedor">
+    </div>
+    
+    <div>
+      <label for="calificacion">Calificación</label>
+      <input type="number" id="calificacion" name="calificacion" [(ngModel)]="proveedor.calificacion" 
+             step="0.01" min="0" max="5">
+      <div *ngIf="proveedor.calificacion" class="star-rating">
+        <span *ngFor="let star of obtenerEstrellas(proveedor.calificacion)" 
+              [class]="star === 1 ? 'star-full' : star === 0.5 ? 'star-half' : 'star-empty'">★</span>
+      </div>
+    </div>
+    
+    <div>
+      <label for="diasPlazo">Días Plazo</label>
+      <input type="number" id="diasPlazo" name="diasPlazo" [(ngModel)]="proveedor.diasPlazo">
+    </div>
+    
+    <div>
+      <label for="limiteCredito">Límite Crédito</label>
+      <input type="number" id="limiteCredito" name="limiteCredito" [(ngModel)]="proveedor.limiteCredito" step="0.01">
+    </div>
+    
+    <div>
+      <label for="contactoPrincipal">Contacto Principal</label>
+      <input type="text" id="contactoPrincipal" name="contactoPrincipal" [(ngModel)]="proveedor.contactoPrincipal">
+    </div>
+    
+    <div>
+      <label for="telefonoContacto">Teléfono Contacto</label>
+      <input type="text" id="telefonoContacto" name="telefonoContacto" [(ngModel)]="proveedor.telefonoContacto">
+    </div>
+    
+    <div>
+      <label for="emailContacto">Email Contacto</label>
+      <input type="email" id="emailContacto" name="emailContacto" [(ngModel)]="proveedor.emailContacto">
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="proveedor.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearProveedor()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="proveedor.idProveedor" (click)="Eliminar(proveedor)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarPersona">Buscar por Persona</label>
+      <input type="number" id="buscarPersona" #buscarPersona placeholder="ID Persona">
+    </div>
+    <div class="form-group">
+      <label for="buscarNombreComercial">Buscar por Nombre</label>
+      <input type="text" id="buscarNombreComercial" #buscarNombreComercial placeholder="Nombre comercial">
+    </div>
+    <div class="form-group">
+      <label for="buscarCategoria">Categoría</label>
+      <input type="text" id="buscarCategoria" #buscarCategoria placeholder="Categoría proveedor">
+    </div>
+    <div class="form-group">
+      <label for="buscarCalificacion">Calificación Mínima</label>
+      <input type="number" id="buscarCalificacion" #buscarCalificacion placeholder="Calificación (0-5)" step="0.1" min="0" max="5">
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorPersona(buscarPersona.value)">Buscar Persona</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorNombreComercial(buscarNombreComercial.value)">Buscar Nombre</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorCategoria(buscarCategoria.value)">Buscar Categoría</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarActivos()">Solo Activos</button>
+      <button type="button" class="btn-secondary" (click)="buscarProveedores()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Proveedores</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Persona/Compañía</th>
+          <th>Nombre Comercial</th>
+          <th>Categoría</th>
+          <th>Calificación</th>
+          <th>Días Plazo</th>
+          <th>Límite Crédito</th>
+          <th>Contacto</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of proveedores">
+          <td>{{ p.idProveedor }}</td>
+          <td>
+            <span *ngIf="p.persona?.tipoPersona === 'NATURAL'">
+              {{ p.persona?.primerNombre }} {{ p.persona?.primerApellido }}
+            </span>
+            <span *ngIf="p.persona?.tipoPersona === 'JURIDICA'">
+              {{ p.persona?.razonSocial }}
+            </span>
+          </td>
+          <td>{{ p.nombreComercial || 'N/A' }}</td>
+          <td>{{ p.categoriaProveedor }}</td>
+          <td>
+            <div class="star-rating small">
+              <span *ngFor="let star of obtenerEstrellas(p.calificacion)" 
+                    [class]="star === 1 ? 'star-full' : star === 0.5 ? 'star-half' : 'star-empty'">★</span>
+              <small class="text-muted">({{ p.calificacion | number:'1.1-1' }})</small>
+            </div>
+          </td>
+          <td>{{ p.diasPlazo }} días</td>
+          <td>{{ p.limiteCredito | currency }}</td>
+          <td>
+            <small>{{ p.contactoPrincipal || 'N/A' }}</small>
+            <br>
+            <small class="text-muted">{{ p.telefonoContacto || 'N/A' }}</small>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="p.activo ? 'bg-success' : 'bg-danger'">
+              {{ p.activo ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(p)">Editar</button>
+              <button class="btn-warning" (click)="actualizarCalificacion(p, 4.5)">Calificar 4.5</button>
+              <button class="btn-danger" (click)="Eliminar(p)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="proveedores.length === 0">
+          <td colspan="10" style="text-align: center;">No hay proveedores registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

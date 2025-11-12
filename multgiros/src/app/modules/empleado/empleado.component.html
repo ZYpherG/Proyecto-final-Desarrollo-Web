@@ -1,0 +1,177 @@
+<div class="card">
+  <h2>Empleados</h2>
+  
+  <form id="formEmpleado" class="grid-3">
+    <div>
+      <label for="idPersona">Persona</label>
+      <select id="idPersona" name="idPersona" [(ngModel)]="empleado.idPersona" required>
+        <option value="">Seleccionar persona</option>
+        <option *ngFor="let persona of personas" [value]="persona.idPersona">
+          {{ persona.primerNombre }} {{ persona.primerApellido }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idSucursal">Sucursal</label>
+      <select id="idSucursal" name="idSucursal" [(ngModel)]="empleado.idSucursal" required>
+        <option value="">Seleccionar sucursal</option>
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.idSucursal">
+          {{ sucursal.nombreSucursal }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idEstadoEmpleado">Estado Empleado</label>
+      <select id="idEstadoEmpleado" name="idEstadoEmpleado" [(ngModel)]="empleado.idEstadoEmpleado" required>
+        <option value="">Seleccionar estado</option>
+        <option *ngFor="let estado of estadosEmpleado" [value]="estado.idEstadoEmpleado">
+          {{ estado.estado }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="codigoEmpleado">Código Empleado</label>
+      <input type="text" id="codigoEmpleado" name="codigoEmpleado" [(ngModel)]="empleado.codigoEmpleado" required>
+    </div>
+    
+    <div>
+      <label for="fechaIngreso">Fecha Ingreso</label>
+      <input type="date" id="fechaIngreso" name="fechaIngreso" [(ngModel)]="empleado.fechaIngreso" required>
+    </div>
+    
+    <div>
+      <label for="salarioBase">Salario Base</label>
+      <input type="number" id="salarioBase" name="salarioBase" [(ngModel)]="empleado.salarioBase" step="0.01" required>
+    </div>
+    
+    <div>
+      <label for="fechaEgreso">Fecha Egreso</label>
+      <input type="date" id="fechaEgreso" name="fechaEgreso" [(ngModel)]="empleado.fechaEgreso">
+    </div>
+    
+    <div>
+      <label for="cargo">Cargo</label>
+      <input type="text" id="cargo" name="cargo" [(ngModel)]="empleado.cargo">
+    </div>
+    
+    <div>
+      <label for="departamento">Departamento</label>
+      <input type="text" id="departamento" name="departamento" [(ngModel)]="empleado.departamento">
+    </div>
+    
+    <div>
+      <label for="numeroLicencia">Número Licencia</label>
+      <input type="text" id="numeroLicencia" name="numeroLicencia" [(ngModel)]="empleado.numeroLicencia">
+    </div>
+    
+    <div>
+      <label for="categoriaLicencia">Categoría Licencia</label>
+      <input type="text" id="categoriaLicencia" name="categoriaLicencia" [(ngModel)]="empleado.categoriaLicencia">
+    </div>
+    
+    <div>
+      <label for="fechaVencimientoLicencia">Vencimiento Licencia</label>
+      <input type="date" id="fechaVencimientoLicencia" name="fechaVencimientoLicencia" [(ngModel)]="empleado.fechaVencimientoLicencia">
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="empleado.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearEmpleado()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="empleado.idEmpleado" (click)="Eliminar(empleado)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarCodigo">Buscar por Código</label>
+      <input type="text" id="buscarCodigo" #buscarCodigo placeholder="Código empleado">
+    </div>
+    <div class="form-group">
+      <label for="buscarPersona">Buscar por Persona</label>
+      <input type="number" id="buscarPersona" #buscarPersona placeholder="ID Persona">
+    </div>
+    <div class="form-group">
+      <label for="buscarSucursal">Buscar por Sucursal</label>
+      <input type="number" id="buscarSucursal" #buscarSucursal placeholder="ID Sucursal">
+    </div>
+    <div class="form-group">
+      <label for="buscarEstado">Estado Empleado</label>
+      <input type="number" id="buscarEstado" #buscarEstado placeholder="ID Estado">
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorCodigo(buscarCodigo.value)">Buscar Código</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorPersona(buscarPersona.value)">Buscar Persona</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorSucursal(buscarSucursal.value)">Buscar Sucursal</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarActivos()">Solo Activos</button>
+      <button type="button" class="btn-secondary" (click)="buscarEmpleados()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Empleados</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Sucursal</th>
+          <th>Cargo</th>
+          <th>Salario</th>
+          <th>Fecha Ingreso</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of empleados">
+          <td>{{ e.idEmpleado }}</td>
+          <td><strong>{{ e.codigoEmpleado }}</strong></td>
+          <td>{{ e.persona?.primerNombre }} {{ e.persona?.primerApellido }}</td>
+          <td>{{ e.sucursal?.nombreSucursal }}</td>
+          <td>{{ e.cargo || 'N/A' }}</td>
+          <td>{{ e.salarioBase | currency }}</td>
+          <td>{{ e.fechaIngreso | date:'shortDate' }}</td>
+          <td>
+            <span class="badge" [ngClass]="e.activo ? 'bg-success' : 'bg-danger'">
+              {{ e.activo ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(e)">Editar</button>
+              <button class="btn-warning" *ngIf="e.activo" (click)="darDeBaja(e)">Dar de Baja</button>
+              <button class="btn-danger" (click)="Eliminar(e)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="empleados.length === 0">
+          <td colspan="9" style="text-align: center;">No hay empleados registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

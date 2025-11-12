@@ -1,0 +1,192 @@
+<div class="card">
+  <h2>Personas</h2>
+  
+  <form id="formPersona" class="grid-3">
+    <div>
+      <label for="tipoPersona">Tipo Persona</label>
+      <select id="tipoPersona" name="tipoPersona" [(ngModel)]="persona.tipoPersona" required>
+        <option value="NATURAL">Natural</option>
+        <option value="JURIDICA">Jurídica</option>
+      </select>
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="primerNombre">Primer Nombre</label>
+      <input type="text" id="primerNombre" name="primerNombre" [(ngModel)]="persona.primerNombre">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="segundoNombre">Segundo Nombre</label>
+      <input type="text" id="segundoNombre" name="segundoNombre" [(ngModel)]="persona.segundoNombre">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="tercerNombre">Tercer Nombre</label>
+      <input type="text" id="tercerNombre" name="tercerNombre" [(ngModel)]="persona.tercerNombre">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="primerApellido">Primer Apellido</label>
+      <input type="text" id="primerApellido" name="primerApellido" [(ngModel)]="persona.primerApellido">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="segundoApellido">Segundo Apellido</label>
+      <input type="text" id="segundoApellido" name="segundoApellido" [(ngModel)]="persona.segundoApellido">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="apellidoCasada">Apellido Casada</label>
+      <input type="text" id="apellidoCasada" name="apellidoCasada" [(ngModel)]="persona.apellidoCasada">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'JURIDICA'" class="grid-span-3">
+      <label for="razonSocial">Razón Social</label>
+      <input type="text" id="razonSocial" name="razonSocial" [(ngModel)]="persona.razonSocial">
+    </div>
+    
+    <div>
+      <label for="numeroDocumento">Número Documento</label>
+      <input type="text" id="numeroDocumento" name="numeroDocumento" [(ngModel)]="persona.numeroDocumento" required>
+    </div>
+    
+    <div>
+      <label for="nit">NIT</label>
+      <input type="text" id="nit" name="nit" [(ngModel)]="persona.nit">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="dpi">DPI</label>
+      <input type="text" id="dpi" name="dpi" [(ngModel)]="persona.dpi">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'JURIDICA'">
+      <label for="ruc">RUC</label>
+      <input type="text" id="ruc" name="ruc" [(ngModel)]="persona.ruc">
+    </div>
+    
+    <div>
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" name="telefono" [(ngModel)]="persona.telefono">
+    </div>
+    
+    <div>
+      <label for="telefonoCelular">Teléfono Celular</label>
+      <input type="text" id="telefonoCelular" name="telefonoCelular" [(ngModel)]="persona.telefonoCelular">
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" [(ngModel)]="persona.email">
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="direccion">Dirección</label>
+      <textarea id="direccion" name="direccion" [(ngModel)]="persona.direccion" rows="2"></textarea>
+    </div>
+    
+    <div>
+      <label for="departamento">Departamento</label>
+      <input type="text" id="departamento" name="departamento" [(ngModel)]="persona.departamento">
+    </div>
+    
+    <div>
+      <label for="pais">País</label>
+      <input type="text" id="pais" name="pais" [(ngModel)]="persona.pais">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'NATURAL'">
+      <label for="fechaNacimiento">Fecha Nacimiento</label>
+      <input type="date" id="fechaNacimiento" name="fechaNacimiento" [(ngModel)]="persona.fechaNacimiento">
+    </div>
+    
+    <div *ngIf="persona.tipoPersona === 'JURIDICA'">
+      <label for="nombreEmpresa">Nombre Empresa</label>
+      <input type="text" id="nombreEmpresa" name="nombreEmpresa" [(ngModel)]="persona.nombreEmpresa">
+    </div>
+    
+    <div>
+      <label for="banco">Banco</label>
+      <input type="text" id="banco" name="banco" [(ngModel)]="persona.banco">
+    </div>
+    
+    <div>
+      <label for="cuentaBancaria">Cuenta Bancaria</label>
+      <input type="text" id="cuentaBancaria" name="cuentaBancaria" [(ngModel)]="persona.cuentaBancaria">
+    </div>
+    
+    <div>
+      <label for="tipoCuenta">Tipo Cuenta</label>
+      <input type="text" id="tipoCuenta" name="tipoCuenta" [(ngModel)]="persona.tipoCuenta">
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearPersona()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="persona.idPersona" (click)="Eliminar(persona)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section">
+    <div class="form-group">
+      <label for="buscarDocumento">Buscar por Documento</label>
+      <input type="text" id="buscarDocumento" #buscarDocumento placeholder="Número documento">
+    </div>
+    <button type="button" class="btn-secondary" (click)="buscarPorDocumento(buscarDocumento.value)">Buscar</button>
+    <button type="button" class="btn-secondary" (click)="buscarPersonas()">Mostrar Todos</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Personas</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Nombre/Razón Social</th>
+          <th>Documento</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of personas">
+          <td>{{ p.idPersona }}</td>
+          <td>
+            <span class="badge" [ngClass]="p.tipoPersona === 'NATURAL' ? 'bg-info' : 'bg-primary'">
+              {{ p.tipoPersona }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="p.tipoPersona === 'NATURAL'">
+              {{ p.primerNombre }} {{ p.primerApellido }}
+            </span>
+            <span *ngIf="p.tipoPersona === 'JURIDICA'">
+              {{ p.razonSocial }}
+            </span>
+          </td>
+          <td><strong>{{ p.numeroDocumento }}</strong></td>
+          <td>{{ p.telefonoCelular || p.telefono || 'N/A' }}</td>
+          <td>{{ p.email || 'N/A' }}</td>
+          <td>{{ p.direccion || 'N/A' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(p)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(p)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="personas.length === 0">
+          <td colspan="8" style="text-align: center;">No hay personas registradas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,329 @@
+<div class="card">
+  <h2>Órdenes</h2>
+  
+  <form id="formOrden" class="grid-3">
+    <div>
+      <label for="tipoOrden">Tipo Orden</label>
+      <select id="tipoOrden" name="tipoOrden" [(ngModel)]="orden.tipoOrden" required>
+        <option value="PEDIDO_CLIENTE">Pedido Cliente</option>
+        <option value="PEDIDO_INTERNO">Pedido Interno</option>
+        <option value="ORDEN_TRABAJO">Orden Trabajo</option>
+        <option value="ORDEN_COMPRA">Orden Compra</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="numeroOrden">Número Orden</label>
+      <input type="text" id="numeroOrden" name="numeroOrden" [(ngModel)]="orden.numeroOrden" required>
+    </div>
+    
+    <div>
+      <label for="idGiroNegocioOrigen">Giro Origen</label>
+      <select id="idGiroNegocioOrigen" name="idGiroNegocioOrigen" [(ngModel)]="orden.idGiroNegocioOrigen">
+        <option value="">Seleccionar giro</option>
+        <option *ngFor="let giro of girosNegocio" [value]="giro.idGiroNegocio">
+          {{ giro.nombreGiro }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idGiroNegocioDestino">Giro Destino</label>
+      <select id="idGiroNegocioDestino" name="idGiroNegocioDestino" [(ngModel)]="orden.idGiroNegocioDestino">
+        <option value="">Seleccionar giro</option>
+        <option *ngFor="let giro of girosNegocio" [value]="giro.idGiroNegocio">
+          {{ giro.nombreGiro }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idGiroNegocioEjecutor">Giro Ejecutor</label>
+      <select id="idGiroNegocioEjecutor" name="idGiroNegocioEjecutor" [(ngModel)]="orden.idGiroNegocioEjecutor">
+        <option value="">Seleccionar giro</option>
+        <option *ngFor="let giro of girosNegocio" [value]="giro.idGiroNegocio">
+          {{ giro.nombreGiro }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idSucursalOrigen">Sucursal Origen</label>
+      <select id="idSucursalOrigen" name="idSucursalOrigen" [(ngModel)]="orden.idSucursalOrigen">
+        <option value="">Seleccionar sucursal</option>
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.idSucursal">
+          {{ sucursal.nombreSucursal }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idSucursalDestino">Sucursal Destino</label>
+      <select id="idSucursalDestino" name="idSucursalDestino" [(ngModel)]="orden.idSucursalDestino">
+        <option value="">Seleccionar sucursal</option>
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.idSucursal">
+          {{ sucursal.nombreSucursal }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idCliente">Cliente</label>
+      <select id="idCliente" name="idCliente" [(ngModel)]="orden.idCliente">
+        <option value="">Seleccionar cliente</option>
+        <option *ngFor="let cliente of clientes" [value]="cliente.idCliente">
+          {{ cliente.persona?.razonSocial || (cliente.persona?.primerNombre + ' ' + cliente.persona?.primerApellido) }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idProveedor">Proveedor</label>
+      <select id="idProveedor" name="idProveedor" [(ngModel)]="orden.idProveedor">
+        <option value="">Seleccionar proveedor</option>
+        <option *ngFor="let proveedor of proveedores" [value]="proveedor.idProveedor">
+          {{ proveedor.nombreComercial || proveedor.persona?.razonSocial }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idEstadoOrden">Estado Orden</label>
+      <select id="idEstadoOrden" name="idEstadoOrden" [(ngModel)]="orden.idEstadoOrden" required>
+        <option value="">Seleccionar estado</option>
+        <option *ngFor="let estado of estadosOrden" [value]="estado.idEstadoOrden">
+          {{ estado.estado }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idEmpleadoResponsable">Empleado Responsable</label>
+      <select id="idEmpleadoResponsable" name="idEmpleadoResponsable" [(ngModel)]="orden.idEmpleadoResponsable">
+        <option value="">Seleccionar empleado</option>
+        <option *ngFor="let empleado of empleados" [value]="empleado.idEmpleado">
+          {{ empleado.persona?.primerNombre }} {{ empleado.persona?.primerApellido }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="fechaRequerida">Fecha Requerida</label>
+      <input type="date" id="fechaRequerida" name="fechaRequerida" [(ngModel)]="orden.fechaRequerida">
+    </div>
+    
+    <div>
+      <label for="fechaEntrega">Fecha Entrega</label>
+      <input type="date" id="fechaEntrega" name="fechaEntrega" [(ngModel)]="orden.fechaEntrega">
+    </div>
+    
+    <div>
+      <label for="fechaInicioEstimada">Fecha Inicio Estimada</label>
+      <input type="date" id="fechaInicioEstimada" name="fechaInicioEstimada" [(ngModel)]="orden.fechaInicioEstimada">
+    </div>
+    
+    <div>
+      <label for="fechaInicioReal">Fecha Inicio Real</label>
+      <input type="date" id="fechaInicioReal" name="fechaInicioReal" [(ngModel)]="orden.fechaInicioReal">
+    </div>
+    
+    <div>
+      <label for="duracionEstimada">Duración Estimada (días)</label>
+      <input type="number" id="duracionEstimada" name="duracionEstimada" [(ngModel)]="orden.duracionEstimada">
+    </div>
+    
+    <div>
+      <label for="duracionReal">Duración Real (días)</label>
+      <input type="number" id="duracionReal" name="duracionReal" [(ngModel)]="orden.duracionReal">
+    </div>
+    
+    <div>
+      <label for="prioridad">Prioridad</label>
+      <select id="prioridad" name="prioridad" [(ngModel)]="orden.prioridad">
+        <option value="BAJA">Baja</option>
+        <option value="NORMAL">Normal</option>
+        <option value="ALTA">Alta</option>
+        <option value="URGENTE">Urgente</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="porcentajeAvance">Porcentaje Avance (%)</label>
+      <input type="number" id="porcentajeAvance" name="porcentajeAvance" [(ngModel)]="orden.porcentajeAvance" min="0" max="100">
+    </div>
+    
+    <div>
+      <label for="subtotal">Subtotal</label>
+      <input type="number" id="subtotal" name="subtotal" [(ngModel)]="orden.subtotal" step="0.01"
+             (change)="calcularTotal()">
+    </div>
+    
+    <div>
+      <label for="impuestos">Impuestos</label>
+      <input type="number" id="impuestos" name="impuestos" [(ngModel)]="orden.impuestos" step="0.01"
+             (change)="calcularTotal()">
+    </div>
+    
+    <div>
+      <label for="descuentos">Descuentos</label>
+      <input type="number" id="descuentos" name="descuentos" [(ngModel)]="orden.descuentos" step="0.01"
+             (change)="calcularTotal()">
+    </div>
+    
+    <div>
+      <label for="total">Total</label>
+      <input type="number" id="total" name="total" [(ngModel)]="orden.total" step="0.01" readonly>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" name="observaciones" [(ngModel)]="orden.observaciones" rows="3"></textarea>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="usuarioCreacion">Usuario Creación</label>
+      <input type="text" id="usuarioCreacion" name="usuarioCreacion" [(ngModel)]="orden.usuarioCreacion">
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearOrden()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="orden.idOrden" (click)="Eliminar(orden)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarNumero">Buscar por Número</label>
+      <input type="text" id="buscarNumero" #buscarNumero placeholder="Número orden">
+    </div>
+    <div class="form-group">
+      <label for="buscarTipo">Tipo Orden</label>
+      <select id="buscarTipo" #buscarTipo>
+        <option value="">Todos los tipos</option>
+        <option value="PEDIDO_CLIENTE">Pedido Cliente</option>
+        <option value="PEDIDO_INTERNO">Pedido Interno</option>
+        <option value="ORDEN_TRABAJO">Orden Trabajo</option>
+        <option value="ORDEN_COMPRA">Orden Compra</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="buscarEstado">Estado Orden</label>
+      <input type="number" id="buscarEstado" #buscarEstado placeholder="ID Estado">
+    </div>
+    <div class="form-group">
+      <label for="buscarCliente">Buscar por Cliente</label>
+      <input type="number" id="buscarCliente" #buscarCliente placeholder="ID Cliente">
+    </div>
+    
+    <div class="form-group">
+      <label for="buscarProveedor">Buscar por Proveedor</label>
+      <input type="number" id="buscarProveedor" #buscarProveedor placeholder="ID Proveedor">
+    </div>
+    <div class="form-group">
+      <label for="buscarPrioridad">Prioridad</label>
+      <select id="buscarPrioridad" #buscarPrioridad>
+        <option value="">Todas las prioridades</option>
+        <option value="BAJA">Baja</option>
+        <option value="NORMAL">Normal</option>
+        <option value="ALTA">Alta</option>
+        <option value="URGENTE">Urgente</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="fechaInicio">Fecha Inicio</label>
+      <input type="date" id="fechaInicio" #fechaInicio>
+    </div>
+    <div class="form-group">
+      <label for="fechaFin">Fecha Fin</label>
+      <input type="date" id="fechaFin" #fechaFin>
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorNumero(buscarNumero.value)">Buscar Número</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorTipoOrden(buscarTipo.value)">Buscar Tipo</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorRangoFechas(fechaInicio.value, fechaFin.value)">Buscar Fechas</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarOrdenes()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Órdenes</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Número</th>
+          <th>Tipo</th>
+          <th>Cliente/Proveedor</th>
+          <th>Estado</th>
+          <th>Prioridad</th>
+          <th>Avance</th>
+          <th>Total</th>
+          <th>Fecha Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of ordenes">
+          <td>{{ o.idOrden }}</td>
+          <td><strong>{{ o.numeroOrden }}</strong></td>
+          <td>
+            <span class="badge bg-info">{{ o.tipoOrden }}</span>
+          </td>
+          <td>
+            <span *ngIf="o.cliente">
+              {{ o.cliente.persona?.razonSocial || (o.cliente.persona?.primerNombre + ' ' + o.cliente.persona?.primerApellido) }}
+            </span>
+            <span *ngIf="o.proveedor">
+              {{ o.proveedor.nombreComercial || o.proveedor.persona?.razonSocial }}
+            </span>
+            <span *ngIf="!o.cliente && !o.proveedor">Interno</span>
+          </td>
+          <td>{{ o.estadoOrden?.estado }}</td>
+          <td>
+            <span [ngClass]="obtenerClasePrioridad(o.prioridad)">
+              {{ o.prioridad }}
+            </span>
+          </td>
+          <td>
+            <div class="progress" style="height: 20px;">
+              <div class="progress-bar" 
+                   [ngClass]="obtenerClaseAvance(o.porcentajeAvance)"
+                   [style.width]="o.porcentajeAvance + '%'">
+                {{ o.porcentajeAvance }}%
+              </div>
+            </div>
+          </td>
+          <td>{{ o.total | currency }}</td>
+          <td>{{ o.fechaCreacion | date:'shortDate' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(o)">Editar</button>
+              <button class="btn-success" *ngIf="o.porcentajeAvance < 100" 
+                      (click)="marcarComoCompletada(o)">Completar</button>
+              <button class="btn-info" (click)="actualizarAvance(o, 25)">25%</button>
+              <button class="btn-info" (click)="actualizarAvance(o, 50)">50%</button>
+              <button class="btn-info" (click)="actualizarAvance(o, 75)">75%</button>
+              <button class="btn-danger" (click)="Eliminar(o)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="ordenes.length === 0">
+          <td colspan="10" style="text-align: center;">No hay órdenes registradas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

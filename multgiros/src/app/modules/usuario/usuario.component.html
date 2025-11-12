@@ -1,0 +1,181 @@
+<div class="card">
+  <h2>Usuarios</h2>
+  
+  <form id="formUsuario" class="grid-3">
+    <div>
+      <label for="idEmpleado">Empleado</label>
+      <select id="idEmpleado" name="idEmpleado" [(ngModel)]="usuario.idEmpleado" required>
+        <option value="">Seleccionar empleado</option>
+        <option *ngFor="let empleado of empleados" [value]="empleado.idEmpleado">
+          {{ empleado.persona?.primerNombre }} {{ empleado.persona?.primerApellido }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="idGiroNegocio">Giro Negocio</label>
+      <select id="idGiroNegocio" name="idGiroNegocio" [(ngModel)]="usuario.idGiroNegocio">
+        <option value="">Seleccionar giro</option>
+        <option *ngFor="let giro of girosNegocio" [value]="giro.idGiroNegocio">
+          {{ giro.nombreGiro }}
+        </option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="nombreUsuario">Nombre Usuario</label>
+      <input type="text" id="nombreUsuario" name="nombreUsuario" [(ngModel)]="usuario.nombreUsuario" required>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="passwordHash">Contraseña</label>
+      <input type="password" id="passwordHash" name="passwordHash" [(ngModel)]="usuario.passwordHash" required>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" [(ngModel)]="usuario.email">
+    </div>
+    
+    <div>
+      <label for="rol">Rol</label>
+      <select id="rol" name="rol" [(ngModel)]="usuario.rol" required>
+        <option value="ADMIN">Administrador</option>
+        <option value="GERENTE">Gerente</option>
+        <option value="OPERADOR">Operador</option>
+        <option value="VENDEDOR">Vendedor</option>
+        <option value="SUPERVISOR">Supervisor</option>
+        <option value="CONTADOR">Contador</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="activo">Activo</label>
+      <select id="activo" name="activo" [(ngModel)]="usuario.activo">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="bloqueado">Bloqueado</label>
+      <select id="bloqueado" name="bloqueado" [(ngModel)]="usuario.bloqueado">
+        <option value="false">No</option>
+        <option value="true">Sí</option>
+      </select>
+    </div>
+    
+    <div>
+      <label for="intentosFallidos">Intentos Fallidos</label>
+      <input type="number" id="intentosFallidos" name="intentosFallidos" [(ngModel)]="usuario.intentosFallidos" min="0">
+    </div>
+    
+    <div>
+      <label for="fechaUltimoLogin">Último Login</label>
+      <input type="datetime-local" id="fechaUltimoLogin" name="fechaUltimoLogin" [(ngModel)]="usuario.fechaUltimoLogin">
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearUsuario()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="usuario.idUsuario" (click)="Eliminar(usuario)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarNombreUsuario">Buscar por Usuario</label>
+      <input type="text" id="buscarNombreUsuario" #buscarNombreUsuario placeholder="Nombre usuario">
+    </div>
+    <div class="form-group">
+      <label for="buscarEmail">Buscar por Email</label>
+      <input type="email" id="buscarEmail" #buscarEmail placeholder="Email">
+    </div>
+    <div class="form-group">
+      <label for="buscarRol">Rol</label>
+      <select id="buscarRol" #buscarRol>
+        <option value="">Todos los roles</option>
+        <option value="ADMIN">Administrador</option>
+        <option value="GERENTE">Gerente</option>
+        <option value="OPERADOR">Operador</option>
+        <option value="VENDEDOR">Vendedor</option>
+        <option value="SUPERVISOR">Supervisor</option>
+        <option value="CONTADOR">Contador</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="buscarGiro">Buscar por Giro</label>
+      <input type="number" id="buscarGiro" #buscarGiro placeholder="ID Giro">
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorNombreUsuario(buscarNombreUsuario.value)">Buscar Usuario</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorEmail(buscarEmail.value)">Buscar Email</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorRol(buscarRol.value)">Buscar Rol</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarActivos()">Solo Activos</button>
+      <button type="button" class="btn-secondary" (click)="buscarUsuarios()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Usuarios</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Empleado</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Giro Negocio</th>
+          <th>Estado</th>
+          <th>Último Login</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios">
+          <td>{{ u.idUsuario }}</td>
+          <td><strong>{{ u.nombreUsuario }}</strong></td>
+          <td>{{ u.empleado?.persona?.primerNombre }} {{ u.empleado?.persona?.primerApellido }}</td>
+          <td>{{ u.email || 'N/A' }}</td>
+          <td>
+            <span [ngClass]="obtenerClaseRol(u.rol)">
+              {{ u.rol }}
+            </span>
+          </td>
+          <td>{{ u.giroNegocio?.nombreGiro || 'N/A' }}</td>
+          <td>
+            <span [ngClass]="obtenerClaseEstado(u.activo, u.bloqueado)">
+              {{ obtenerTextoEstado(u.activo, u.bloqueado) }}
+            </span>
+          </td>
+          <td>{{ u.fechaUltimoLogin | date:'short' || 'Nunca' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(u)">Editar</button>
+              <button class="btn-warning" *ngIf="!u.bloqueado" (click)="bloquearUsuario(u)">Bloquear</button>
+              <button class="btn-success" *ngIf="u.bloqueado" (click)="desbloquearUsuario(u)">Desbloquear</button>
+              <button class="btn-info" (click)="toggleActivo(u)">{{ u.activo ? 'Desactivar' : 'Activar' }}</button>
+              <button class="btn-danger" (click)="Eliminar(u)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="usuarios.length === 0">
+          <td colspan="9" style="text-align: center;">No hay usuarios registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

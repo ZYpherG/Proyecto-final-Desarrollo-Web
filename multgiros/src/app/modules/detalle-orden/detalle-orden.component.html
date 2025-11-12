@@ -1,0 +1,147 @@
+<div class="card">
+  <h2>Detalles de Orden</h2>
+  
+  <form id="formDetalle" class="grid-3">
+    <div>
+      <label for="idOrden">Orden</label>
+      <input type="text" id="idOrden" name="idOrden"
+             placeholder="Ingrese número o código de orden"
+             [(ngModel)]="detalle.idDetalleOrden" required>
+    </div>
+    
+    <div>
+      <label for="cantidadSolicitada">Cantidad Solicitada</label>
+      <input type="number" id="cantidadSolicitada" name="cantidadSolicitada" 
+             [(ngModel)]="detalle.cantidadSolicitada" step="0.001" required
+             (change)="calcularSubtotal()">
+    </div>
+    
+    <div>
+      <label for="cantidadDespachada">Cantidad Despachada</label>
+      <input type="number" id="cantidadDespachada" name="cantidadDespachada" 
+             [(ngModel)]="detalle.cantidadDespachada" step="0.001">
+    </div>
+    
+    <div>
+      <label for="precioUnitario">Precio Unitario</label>
+      <input type="number" id="precioUnitario" name="precioUnitario" 
+             [(ngModel)]="detalle.precioUnitario" step="0.01" required
+             (change)="calcularSubtotal()">
+    </div>
+    
+    <div>
+      <label for="subtotal">Subtotal</label>
+      <input type="number" id="subtotal" name="subtotal" 
+             [(ngModel)]="detalle.subtotal" step="0.01" readonly>
+    </div>
+    
+    <div>
+      <label for="estadoDetalle">Estado Detalle</label>
+      <select id="estadoDetalle" name="estadoDetalle" [(ngModel)]="detalle.estadoDetalle">
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="PARCIAL">Parcial</option>
+        <option value="COMPLETADA">Completada</option>
+        <option value="CANCELADA">Cancelada</option>
+      </select>
+    </div>
+    
+    <div class="grid-span-3">
+      <label for="observaciones">Observaciones</label>
+      <textarea id="observaciones" name="observaciones" [(ngModel)]="detalle.observaciones" rows="2"></textarea>
+    </div>
+    
+    <div class="align-end grid-3">
+      <button type="button" class="btn-primary" (click)="crearDetalle()">Guardar</button>
+      <button type="button" class="btn-secondary" (click)="Limpiar()">Limpiar</button>
+      <button type="button" class="btn-danger" *ngIf="detalle.idDetalleOrden" (click)="Eliminar(detalle)">Eliminar</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Búsqueda</h3>
+  <div class="search-section grid-4">
+    <div class="form-group">
+      <label for="buscarOrden">Buscar por Orden</label>
+      <input type="number" id="buscarOrden" #buscarOrden placeholder="ID Orden">
+    </div>
+    <div class="form-group">
+      <label for="buscarInventario">Buscar por Inventario</label>
+      <input type="number" id="buscarInventario" #buscarInventario placeholder="ID Inventario">
+    </div>
+    <div class="form-group">
+      <label for="buscarEstado">Estado</label>
+      <select id="buscarEstado" #buscarEstado>
+        <option value="">Todos los estados</option>
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="PARCIAL">Parcial</option>
+        <option value="COMPLETADA">Completada</option>
+        <option value="CANCELADA">Cancelada</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorOrden(buscarOrden.value)">Buscar Orden</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorInventario(buscarInventario.value)">Buscar Inventario</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarPorEstado(buscarEstado.value)">Buscar Estado</button>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn-secondary" (click)="buscarDetalles()">Mostrar Todos</button>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Lista de Detalles</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Orden</th>
+          <th>Producto</th>
+          <th>Cant. Solicitada</th>
+          <th>Cant. Despachada</th>
+          <th>Precio Unitario</th>
+          <th>Subtotal</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of detalles">
+          <td>{{ d.idDetalleOrden }}</td>
+          <td>{{ d.orden?.numeroOrden }}</td>
+          <td>{{ d.inventario?.nombreProducto }}</td>
+          <td>{{ d.cantidadSolicitada }}</td>
+          <td>{{ d.cantidadDespachada }}</td>
+          <td>{{ d.precioUnitario | currency }}</td>
+          <td>{{ d.subtotal | currency }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-warning': d.estadoDetalle === 'PENDIENTE',
+              'bg-info': d.estadoDetalle === 'PARCIAL',
+              'bg-success': d.estadoDetalle === 'COMPLETADA',
+              'bg-danger': d.estadoDetalle === 'CANCELADA'
+            }">
+              {{ d.estadoDetalle }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-secondary" (click)="modificar(d)">Editar</button>
+              <button class="btn-danger" (click)="Eliminar(d)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="detalles.length === 0">
+          <td colspan="9" style="text-align: center;">No hay detalles registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
